@@ -21,7 +21,7 @@ Art production and a Blender scene study are authorized. This does not authorize
 | Dock | Wide functional deck, inset landing marking, perimeter safety rails | Tiny pad that cannot visibly accommodate the ship |
 | Habitation | Amber windows and lit entrances, small practical awnings | Identical glowing panels on every surface |
 | Salvage | Broken structural ring, identifiable hull fragments, sparse floating rock | Uniform clouds of anonymous debris |
-| Player ship | Broad low ivory hull, layered vermilion armor patches, dark forward canopy, ochre cheek accents, paired oversized octagonal cyan engines | A thin rectangular shuttle, a fleet dominating the location, or tiny indistinct engine dots |
+| Player ship | Pointed fighter-style bow, raised dark canopy, swept wings and shoulders, ivory hull with vermilion panels, paired octagonal cyan engines | A flat full-width nose, a rectangular flying slab, a fleet dominating the location, or tiny indistinct engine dots |
 
 Primary read: docking platform and hangar. Secondary read: station operations tower and crane. Tertiary read: cargo, railings, conduits, and salvage. Leave negative space around the ship and between interactive areas.
 
@@ -110,3 +110,4 @@ Before production, agree a target laptop/browser and profile an actual scene. Pr
 2. Retained the narrative/contract/ship-management gameplay and solo server-authoritative scope.
 3. Created an editable art study before selecting a browser renderer or building game systems.
 4. Revised the player ship to follow the supplied close-up: broader layered armor, a forward canopy, and prominent twin cyan engines. Added a standalone ship-detail render for silhouette review.
+5. Sharpened the forebody into a fighter-style silhouette at the user's request: extended pointed nose, raised cockpit, swept wings, and canted rear fins. Added a front inspection camera and preview. This is an art revision, not a request for combat systems.

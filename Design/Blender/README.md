@@ -16,7 +16,7 @@ Open [frontier_depot.blend](frontier_depot.blend) in Blender 4.3 or later. No Py
 - On a keyboard without a numpad, use View → Frame Selected and View → Cameras → Active Camera. The viewport navigation gizmo also offers orbit and zoom.
 - Use Material Preview for quick editing. The rendered PNGs use the saved scene lighting, Cycles, and compositor glare; Material Preview's default studio lighting will differ.
 
-The `08_Cameras` collection contains `CAM_Hero`, `CAM_Rear`, `CAM_Underside`, and `CAM_Ship_Detail`. Choose the camera in the Scene properties camera field, then enter its view with Numpad `0`. Return to ordinary viewport navigation to orbit independently of a camera. The ship-detail camera is framed on the ship; its standalone render temporarily hides the surrounding geometry without changing the saved scene.
+The `08_Cameras` collection contains `CAM_Hero`, `CAM_Rear`, `CAM_Underside`, `CAM_Ship_Front`, and `CAM_Ship_Detail`. Choose the camera in the Scene properties camera field, then enter its view with Numpad `0`. Return to ordinary viewport navigation to orbit independently of a camera. The ship cameras inspect the pointed bow and the twin-engine stern; their standalone renders temporarily hide the surrounding geometry without changing the saved scene.
 
 The station is modeled on all sides and has dock supports below. The preview camera is not a camera-control implementation: collision avoidance, orbit limits, label occlusion, and responsive browser controls are future game work.
 
@@ -30,6 +30,7 @@ The station is modeled on all sides and has dock supports below. The preview cam
 | `frontier_depot_rear.png` | Rear inspection render |
 | `frontier_depot_underside.png` | Underside inspection render |
 | `nomad_ship_detail.png` | Standalone rear three-quarter ship inspection render |
+| `nomad_ship_front.png` | Standalone front three-quarter view of the fighter-style pointed nose |
 | `create_frontier_depot.py` | Deterministic scene-generation script, seed 419 |
 | `scene-report.json` | Basic scene diagnostics; not a browser performance benchmark |
 
@@ -48,7 +49,9 @@ Dimensions use meters as an authoring convention, not a finalized game scale. Th
 
 ### Revised player ship
 
-The revised ship follows the user's close-up reference: a broad, low ivory body, layered oxide-red armor patches, a forward dark canopy, ochre cheek bumpers, and two large inset octagonal engines with short faceted cyan exhaust. The engine collars have modeled openings rather than solid cylinders placed over the hull. Its heading presents the twin engines from the main scene view while pointing generally toward the depot.
+The revised ship combines the user's ivory/red and twin-cyan-engine reference with the requested fighter-jet silhouette: a long pointed forebody, tapered underside, raised angular cockpit, swept shoulders and wings, and small canted tail fins. The engine pods now begin behind the cockpit rather than forming a flat front across the ship's full width. The engine collars retain modeled openings and short faceted cyan exhaust. Its heading presents the twin engines from the main scene view while pointing generally toward the depot. The fighter styling does not add weapons or change the game's combat scope.
+
+![Pointed bow and raised fighter-style cockpit](nomad_ship_front.png)
 
 ![Revised ship detail](nomad_ship_detail.png)
 
@@ -57,7 +60,7 @@ The revised ship follows the user's close-up reference: a broad, low ivory body,
 Run from the repository root with Blender installed:
 
 ```bash
-# Rebuild .blend, .glb, diagnostics, all three scene views, and the ship detail.
+# Rebuild .blend, .glb, diagnostics, all three scene views, and both ship views.
 blender --background --threads 8 --python Design/Blender/create_frontier_depot.py -- --all-views
 
 # Rebuild and render only the main view.
@@ -66,7 +69,7 @@ blender --background --threads 8 --python Design/Blender/create_frontier_depot.p
 # Rebuild assets without rendering.
 blender --background --threads 8 --python Design/Blender/create_frontier_depot.py
 
-# Rebuild assets and render only the isolated ship detail.
+# Rebuild assets and render only the isolated front/rear ship views.
 blender --background --threads 8 --python Design/Blender/create_frontier_depot.py -- --ship-preview
 ```
 

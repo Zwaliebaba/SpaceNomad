@@ -316,8 +316,8 @@ for i in range(12):
     ico('Salvage | drifting rock',(-17+random.uniform(-7,5),random.uniform(-3,13),random.uniform(-6,6)),(s,s*.8,s*.9))
 
 active_group='ship'
-# Reference-inspired compact freighter: low layered ivory hull, red armor patches,
-# forward dark canopy and two large inset octagonal cyan engines. Nose is -Y.
+# Fighter-inspired pointed forebody with a raised canopy, swept shoulders,
+# layered ivory/red armor and twin octagonal cyan engines. Nose is -Y.
 ship_red=material('Ship | oxide red armor','AD3C2E',.25,.5)
 ship_panel=material('Ship | warm panel variation','BEC3C0',.25,.6)
 engine_blue=material('Ship | ion plume blue','089EEA',emission=8)
@@ -365,30 +365,59 @@ def engine_ring(name,x,y,z,outer,inner,depth,mat):
     return o
 
 
-hull_loft('Nomad | armored central hull',0,[(-2.85,.67,-.25,.1),
-    (-2.25,1.02,-.45,.5),(-.9,1.16,-.5,.68),(1.45,1.12,-.5,.58),
+hull_loft('Nomad | armored central hull',0,[(-4.3,.025,-.07,.015),
+    (-3.55,.25,-.2,.23),(-2.65,.54,-.35,.48),(-1.5,.87,-.47,.65),
+    (-.45,1.12,-.5,.7),(1.45,1.12,-.5,.58),
     (2.03,.85,-.33,.36)],ivory)
-hull_loft('Nomad | dark undercarriage',0,[(-2.35,.67,-.62,-.3),
-    (-.9,.92,-.76,-.38),(1.65,.8,-.64,-.32)],dark)
-hull_loft('Nomad | forward glazed cockpit',0,[(-2.51,.56,.16,.21),
-    (-1.85,.72,.47,.75),(-1.25,.63,.61,.87)],glass)
-box('Nomad | cockpit roof lip',(0,-1.2,.84),(1.4,.18,.14),ivory,.045)
-box('Nomad | central dorsal panel',(0,.1,.76),(1.38,1.2,.2),ivory,.09)
-box('Nomad | red dorsal patch',(-.28,.2,.885),(.72,.72,.06),ship_red,.025)
+hull_loft('Nomad | dark undercarriage',0,[(-3.8,.08,-.14,-.09),
+    (-2.5,.38,-.46,-.3),(-.9,.81,-.76,-.38),(1.65,.8,-.64,-.32)],dark)
+hull_loft('Nomad | canopy armored sill',0,[(-2.9,.27,.34,.48),
+    (-2.1,.56,.52,.68),(-.75,.56,.64,.79)],ship_red)
+hull_loft('Nomad | forward glazed cockpit',0,[(-2.83,.22,.47,.51),
+    (-2.15,.46,.63,1.13),(-1.35,.47,.7,1.25),(-.8,.38,.73,1.01)],glass)
+beam('Nomad | canopy rear frame',(-.4,-.85,.97),(.4,-.85,.97),.09,ivory)
+hull_loft('Nomad | central dorsal fairing',0,[(-.82,.47,.7,.92),
+    (.1,.57,.64,.88),(.85,.52,.6,.76)],ivory)
+box('Nomad | red dorsal patch',(-.22,.2,.88),(.54,.64,.06),ship_red,.025)
 box('Nomad | aft dorsal patch',(.24,1.35,.64),(.93,.6,.09),ship_red,.025)
+
+
+def swept_surface(name,outline,thickness,mat):
+    """Closed thin prism from a 3D polygon; real geometry at every orbit angle."""
+    n=len(outline)
+    verts=[(x,y,z-thickness/2) for x,y,z in outline]+[(x,y,z+thickness/2) for x,y,z in outline]
+    faces=[tuple(range(n-1,-1,-1)),tuple(range(n,2*n))]
+    faces += [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)]
+    mesh=bpy.data.meshes.new(name);mesh.from_pydata(verts,[],faces);mesh.update()
+    bm=bmesh.new();bm.from_mesh(mesh);bmesh.ops.recalc_face_normals(bm,faces=bm.faces)
+    bm.to_mesh(mesh);bm.free()
+    o=bpy.data.objects.new(name,mesh);collections['ship'].objects.link(o)
+    mesh.materials.append(mat)
+    return o
+
+
 for x in (-1.55,1.55):
     side='port' if x<0 else 'starboard'
-    hull_loft('Nomad | '+side+' broad sponson',x,[(-2.12,.4,-.36,.24),
-        (-1.5,.6,-.53,.55),(.95,.61,-.53,.58),(1.93,.48,-.43,.4)],ivory)
-    for y in (-1.16,-.25,.68,1.4):
+    sign=-1 if x<0 else 1
+    hull_loft('Nomad | '+side+' broad sponson',x,[(-1.1,.09,-.12,.06),
+        (-.25,.47,-.45,.47),(.65,.61,-.53,.58),(1.93,.48,-.43,.4)],ivory)
+    swept_surface('Nomad | '+side+' swept wing',[(sign*.76,-1.4,.08),
+        (sign*2.65,.83,-.06),(sign*2.57,1.78,-.12),(sign*.95,1.1,-.02)],.13,ivory)
+    swept_surface('Nomad | '+side+' red wingtip',[(sign*2.05,.33,.0),
+        (sign*2.65,.83,.01),(sign*2.57,1.58,-.05),(sign*2.05,1.32,.03)],.06,ship_red)
+    swept_surface('Nomad | '+side+' forward chine',[(sign*.55,-2.35,.13),
+        (sign*1.13,-1.54,.04),(sign*.97,-.93,.08),(sign*.76,-1.36,.23)],.08,ivory)
+    swept_surface('Nomad | '+side+' canted tail fin',[(x, .9,.57),
+        (x+sign*.28,1.35,1.44),(x+sign*.28,1.95,1.24),(x,1.85,.5)],.085,ship_red)
+    for y in (.4,1.4):
         z=.59 if y<1 else .49
         box('Nomad | '+side+' modular top armor',(x,y,z),(.94,.76,.14),
-            ship_red if y in (-.25,1.4) else (ivory if y<0 else ship_panel),.065)
-    # Recessed dark side seams and small ochre bumper echo the image's broad cheeks.
+            ship_red if y==1.4 else ship_panel,.065)
+    # Engine-side service details stay behind the newly swept leading edge.
     out=x+(-.58 if x<0 else .58)
-    for y in (-.9,.4):
+    for y in (.65,1.25):
         box('Nomad | '+side+' side recess',(out,y,-.02),(.035,.55,.19),dark,.02)
-    box('Nomad | '+side+' forward ochre bumper',(out,-1.54,-.16),(.09,.65,.19),amber,.025)
+    box('Nomad | '+side+' ochre service accent',(out,.85,-.16),(.09,.45,.15),amber,.025)
     engine_ring('Nomad | '+side+' ivory engine collar',x,2.04,-.06,.57,.39,.5,ivory)
     engine_ring('Nomad | '+side+' recessed nozzle',x,2.25,-.06,.395,.29,.17,dark)
     o=cylinder('Nomad | '+side+' cyan engine face',(x,2.29,-.06),.285,.05,engine_core,8)
@@ -406,7 +435,7 @@ for x in (-.4,0,.4):
 bpy.ops.object.empty_add(type='PLAIN_AXES',location=(-5,-14,2))
 ship_root=finish(bpy.context.object,'Nomad_Mk_I | assembly',None)
 ship_root.rotation_euler[2]=math.radians(168)
-ship_root['art_revision']='Reference-inspired layered freighter, twin octagonal cyan engines'
+ship_root['art_revision']='Pointed fighter-style nose, raised canopy, swept wings; twin cyan engines'
 for o in list(collections['ship'].objects):
     if o != ship_root:
         o.parent=ship_root
@@ -463,7 +492,9 @@ rear=camera('CAM_Rear',(-29,38,23),(0,1,1),46)
 under=camera('CAM_Underside',(24,-34,-19),(0,1,-1),46)
 ship_q=ship_root.rotation_euler.to_quaternion()
 ship_detail=camera('CAM_Ship_Detail',ship_root.location+ship_q @ Vector((-10,8,7)),
-                   ship_root.location+Vector((0,0,.05)),52)
+                   ship_root.location+ship_q @ Vector((0,-.55,.1)),48)
+ship_front=camera('CAM_Ship_Front',ship_root.location+ship_q @ Vector((9,-12,7)),
+                  ship_root.location+ship_q @ Vector((0,-.55,.1)),52)
 # Place the decorative planet in the hero sky without intersecting the station.
 q=hero.rotation_euler.to_quaternion()
 planet.location=hero.location+q @ Vector((-58,30,-220))
@@ -526,15 +557,18 @@ gltf=json.loads(glb_bytes[20:20+json_size])
     'exported_triangles':sum(gltf['accessors'][p['indices']]['count']//3 for m in gltf['meshes'] for p in m['primitives']),
     'exported_mesh_resources':len(gltf['meshes']),'glb_bytes':len(glb_bytes),
     'note':'Counts are art-study diagnostics, not browser draw calls or a performance benchmark.'},indent=2)+'\n')
+if opts.ship_preview or opts.all_views:
+    for key in ('station','rock','salvage','background','anchors'):
+        collections[key].hide_render=True
+    for cam,suffix in ((ship_front,'front'),(ship_detail,'detail')):
+        scene.camera=cam
+        scene.render.filepath=str(OUT/f'nomad_ship_{suffix}.png')
+        bpy.ops.render.render(write_still=True)
+    for key in ('station','rock','salvage','background','anchors'):
+        collections[key].hide_render=False
 if opts.render or opts.all_views:
     for cam,suffix in [(hero,'preview')]+([(rear,'rear'),(under,'underside')] if opts.all_views else []):
         scene.camera=cam
         scene.render.filepath=str(OUT/f'frontier_depot_{suffix}.png')
         bpy.ops.render.render(write_still=True)
-if opts.ship_preview or opts.all_views:
-    for key in ('station','rock','salvage','background','anchors'):
-        collections[key].hide_render=True
-    scene.camera=ship_detail
-    scene.render.filepath=str(OUT/'nomad_ship_detail.png')
-    bpy.ops.render.render(write_still=True)
 print('SPACE_NOMAD_SCENE_COMPLETE',str(OUT))
