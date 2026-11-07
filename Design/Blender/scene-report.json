@@ -1,12 +1,15 @@
 {
   "blender_version": "4.3.2",
-  "source_mesh_triangles_before_modifiers": 5131,
-  "exported_objects": 271,
+  "source_mesh_triangles_before_modifiers": 5843,
+  "exported_objects": 297,
   "hotspots": [
     "dock",
     "depot",
     "ops",
     "salvage"
   ],
+  "exported_triangles": 12112,
+  "exported_mesh_resources": 292,
+  "glb_bytes": 1089484,
   "note": "Counts are art-study diagnostics, not browser draw calls or a performance benchmark."
 }

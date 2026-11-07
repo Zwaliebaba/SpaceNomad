@@ -21,7 +21,7 @@ Art production and a Blender scene study are authorized. This does not authorize
 | Dock | Wide functional deck, inset landing marking, perimeter safety rails | Tiny pad that cannot visibly accommodate the ship |
 | Habitation | Amber windows and lit entrances, small practical awnings | Identical glowing panels on every surface |
 | Salvage | Broken structural ring, identifiable hull fragments, sparse floating rock | Uniform clouds of anonymous debris |
-| Player ship | Compact cream hull, vermilion accents, dark canopy, paired cyan engines | A warship silhouette or a fleet dominating the location |
+| Player ship | Broad low ivory hull, layered vermilion armor patches, dark forward canopy, ochre cheek accents, paired oversized octagonal cyan engines | A thin rectangular shuttle, a fleet dominating the location, or tiny indistinct engine dots |
 
 Primary read: docking platform and hangar. Secondary read: station operations tower and crane. Tertiary read: cargo, railings, conduits, and salvage. Leave negative space around the ship and between interactive areas.
 
@@ -109,3 +109,4 @@ Before production, agree a target laptop/browser and profile an actual scene. Pr
 1. Replaced the earlier fixed/2.5D presentation proposal with a 3D station location and freely orbiting, zoomable camera, at the user's request.
 2. Retained the narrative/contract/ship-management gameplay and solo server-authoritative scope.
 3. Created an editable art study before selecting a browser renderer or building game systems.
+4. Revised the player ship to follow the supplied close-up: broader layered armor, a forward canopy, and prominent twin cyan engines. Added a standalone ship-detail render for silhouette review.

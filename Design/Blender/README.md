@@ -16,7 +16,7 @@ Open [frontier_depot.blend](frontier_depot.blend) in Blender 4.3 or later. No Py
 - On a keyboard without a numpad, use View → Frame Selected and View → Cameras → Active Camera. The viewport navigation gizmo also offers orbit and zoom.
 - Use Material Preview for quick editing. The rendered PNGs use the saved scene lighting, Cycles, and compositor glare; Material Preview's default studio lighting will differ.
 
-The `08_Cameras` collection contains `CAM_Hero`, `CAM_Rear`, and `CAM_Underside`. Choose the camera in the Scene properties camera field, then enter its view with Numpad `0`. Return to ordinary viewport navigation to orbit independently of a camera.
+The `08_Cameras` collection contains `CAM_Hero`, `CAM_Rear`, `CAM_Underside`, and `CAM_Ship_Detail`. Choose the camera in the Scene properties camera field, then enter its view with Numpad `0`. Return to ordinary viewport navigation to orbit independently of a camera. The ship-detail camera is framed on the ship; its standalone render temporarily hides the surrounding geometry without changing the saved scene.
 
 The station is modeled on all sides and has dock supports below. The preview camera is not a camera-control implementation: collision avoidance, orbit limits, label occlusion, and responsive browser controls are future game work.
 
@@ -29,6 +29,7 @@ The station is modeled on all sides and has dock supports below. The preview cam
 | `frontier_depot_preview.png` | Front three-quarter render |
 | `frontier_depot_rear.png` | Rear inspection render |
 | `frontier_depot_underside.png` | Underside inspection render |
+| `nomad_ship_detail.png` | Standalone rear three-quarter ship inspection render |
 | `create_frontier_depot.py` | Deterministic scene-generation script, seed 419 |
 | `scene-report.json` | Basic scene diagnostics; not a browser performance benchmark |
 
@@ -45,12 +46,18 @@ The station is modeled on all sides and has dock supports below. The preview cam
 
 Dimensions use meters as an authoring convention, not a finalized game scale. The ship deliberately remains separate from the station so it can be repositioned later. Nothing is animated or rigged for gameplay.
 
+### Revised player ship
+
+The revised ship follows the user's close-up reference: a broad, low ivory body, layered oxide-red armor patches, a forward dark canopy, ochre cheek bumpers, and two large inset octagonal engines with short faceted cyan exhaust. The engine collars have modeled openings rather than solid cylinders placed over the hull. Its heading presents the twin engines from the main scene view while pointing generally toward the depot.
+
+![Revised ship detail](nomad_ship_detail.png)
+
 ## Rebuild
 
 Run from the repository root with Blender installed:
 
 ```bash
-# Rebuild .blend, .glb, diagnostics, and all three preview images.
+# Rebuild .blend, .glb, diagnostics, all three scene views, and the ship detail.
 blender --background --threads 8 --python Design/Blender/create_frontier_depot.py -- --all-views
 
 # Rebuild and render only the main view.
@@ -58,6 +65,9 @@ blender --background --threads 8 --python Design/Blender/create_frontier_depot.p
 
 # Rebuild assets without rendering.
 blender --background --threads 8 --python Design/Blender/create_frontier_depot.py
+
+# Rebuild assets and render only the isolated ship detail.
+blender --background --threads 8 --python Design/Blender/create_frontier_depot.py -- --ship-preview
 ```
 
 Outputs go beside the generator, regardless of working directory. Rebuilding replaces the generated `.blend`, `.glb`, and diagnostic report, plus any renders requested. Save hand edits to a differently named `.blend` before rebuilding. The generator clears only its own running Blender scene; use background mode as shown rather than executing it inside an unsaved editing session.
@@ -74,4 +84,4 @@ See [the visual style guide](../Visual-Style-Guide.md) for art direction, camera
 
 ## Validation performed
 
-The saved `.blend` reopened successfully in Blender 4.3.2. The GLB was parsed and reimported successfully into a fresh Blender scene, preserving all four hotspot IDs and omitting preview lights, cameras, and backdrop. The exported geometry contains 10,920 triangles and 266 mesh resources in a 998,888-byte file. These counts describe this study, not draw calls or measured browser performance.
+The saved `.blend` reopened successfully in Blender 4.3.2. The GLB was parsed and reimported successfully into a fresh Blender scene, preserving all four hotspot IDs and omitting preview lights, cameras, and backdrop. Current geometry and file-size counts are recorded by the generator in `scene-report.json`; these describe the art study, not draw calls or measured browser performance.
