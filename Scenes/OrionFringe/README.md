@@ -1,5 +1,7 @@
 # Orion Fringe — game scene foundation
 
+Art direction: [SpaceNomad Visual Style Guide](../../Docs/Visual-Style-Guide.md). Related scene: [Asteroid Mining](../AsteroidMining/README.md).
+
 A HUD-free interpretation of the supplied reference: an octagonal orbital depot with two circular side pods, a numbered forward landing deck, a service spine, antenna mast and red pennant; the original Aurora ship preserved as a cruiser in the background; a new starter frigate landed on berth 07; faceted asteroids; a distant blue planet and procedural starfield.
 
 ![Rendered overview](orion_fringe_preview.png)

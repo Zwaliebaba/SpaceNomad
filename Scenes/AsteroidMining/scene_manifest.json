@@ -1,0 +1,52 @@
+{
+  "seed": 2267,
+  "units": "metres",
+  "blender_up": "+Z",
+  "gltf_up": "+Y",
+  "ship_forward": "+Y",
+  "source": "starter_frigate_source.blend / Frigate collection",
+  "assets": {
+    "mining_frigate": {
+      "triangles": 2508
+    },
+    "ore_asteroid": {
+      "triangles": 688
+    },
+    "asteroid_field": {
+      "triangles": 780
+    },
+    "mining_effects": {
+      "triangles": 1708
+    }
+  },
+  "mining": {
+    "beam_count": 2,
+    "surface_hits": [
+      [
+        -0.569265604019165,
+        0.4430028200149536,
+        0.08685355633497238
+      ],
+      [
+        0.17695766687393188,
+        0.041860222816467285,
+        -0.02451413869857788
+      ]
+    ],
+    "emitters": [
+      [
+        -1.9655369520187378,
+        -0.8170799016952515,
+        -0.07418672740459442
+      ],
+      [
+        -0.7878674864768982,
+        -1.6333248615264893,
+        -0.08877196907997131
+      ]
+    ],
+    "minimum_hull_surface_distance": 1.773284912109375,
+    "ore_fragments": 14
+  },
+  "presentation": "Static mining vignette. Beam, spark and drive meshes are separate effects; game extraction logic and engine particle effects are not implemented."
+}
