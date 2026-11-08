@@ -1,0 +1,76 @@
+{
+  "seed": 2268,
+  "units": "metres",
+  "blender_up": "+Z",
+  "gltf_up": "+Y",
+  "ship_forward": "+Y",
+  "source": "starter_frigate_source.blend / Frigate collection",
+  "assets": {
+    "human_combat_frigate": {
+      "triangles": 2096
+    },
+    "veyr_frigate": {
+      "triangles": 1160
+    },
+    "battle_effects": {
+      "triangles": 2708
+    },
+    "asteroid_field": {
+      "triangles": 380
+    }
+  },
+  "opponent": {
+    "faction": "Veyr",
+    "status": "working visual concept",
+    "class": "frigate"
+  },
+  "combat": {
+    "root_separation": 6.223325785544807,
+    "human_weapon_emitter": [
+      -1.9153509140014648,
+      -2.1701016426086426,
+      0.2964392304420471
+    ],
+    "alien_shield_hit": [
+      1.075575351715088,
+      0.6025609970092773,
+      0.5166385769844055
+    ],
+    "alien_emitters": [
+      [
+        2.1992805004119873,
+        0.23500515520572662,
+        0.36892688274383545
+      ],
+      [
+        0.49580222368240356,
+        1.4277935028076172,
+        0.661190390586853
+      ]
+    ],
+    "human_shield_hits": [
+      [
+        -1.0184905529022217,
+        -1.9808602333068848,
+        0.11339128017425537
+      ],
+      [
+        -1.1479809284210205,
+        -1.3325409889221191,
+        0.2334122359752655
+      ]
+    ],
+    "human_shield_radii": [
+      1.0,
+      1.65,
+      0.88
+    ],
+    "alien_shield_radii": [
+      1.8,
+      1.92,
+      0.9
+    ],
+    "shield_contacts_validated": 3
+  },
+  "presentation": "Static combat vignette. Shield patches, pulse bolts and drive plumes are separate meshes; AI, damage and combat simulation are not implemented."
+}

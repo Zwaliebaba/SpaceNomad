@@ -6,10 +6,13 @@ Reference scenes:
 
 - [Orion Fringe](../Scenes/OrionFringe/README.md): station, preserved Aurora cruiser and starter frigate on berth 07.
 - [Asteroid Mining](../Scenes/AsteroidMining/README.md): the starter frigate extracting ore in open space.
+- [Frigate Combat](../Scenes/FrigateCombat/README.md): the same starter frigate dueling a Veyr alien frigate.
 
 ![Orion Fringe overview](../Scenes/OrionFringe/orion_fringe_preview.png)
 
 ![Asteroid Mining overview](../Scenes/AsteroidMining/asteroid_mining_preview.png)
+
+![Frigate Combat overview](../Scenes/FrigateCombat/frigate_combat_preview.png)
 
 ## 1. Art direction
 
@@ -43,6 +46,21 @@ Ships in the same family share split dorsal armor, a central service spine, oran
 The cruiser remains a separate asset at its original scale. Future small ships should be designed around their role and landing envelope instead of uniformly shrinking the cruiser. Preserve the starter hull's recognizable silhouette when adding equipment.
 
 Flight configurations retract landing gear and close its bays. Landed configurations deploy gear, idle the engines and align with the berth. Utility rigs should attach to explicit hardpoints and remain removable from the base ship.
+
+### Alien faction contrast: Veyr
+
+Veyr is the working name for the first alien visual concept. Its frigate is a peer-sized opponent with a different construction language: a narrow central keel framed by two swept crescent blades, layered ivory carapace over dark jade structure, bronze seams and a faceted command crystal. Keep it angular and practical enough to belong in the same low-poly world, while changing the silhouette and panel rhythm as well as the colors.
+
+| Feature | Human starter family | Veyr concept |
+| --- | --- | --- |
+| Silhouette | Narrow longitudinal hull, block armor, twin rear pods | Broad crescent, swept split prow, central crystal |
+| Armor and structure | Blue-grey, titanium and graphite | Ivory, jade and dark internal frames |
+| Identification detail | Burnt-orange bands and visible fasteners | Bronze seams and inlaid jade conduits |
+| Propulsion | Blue tapered plumes | Violet tapered plumes |
+| Weapons | Discrete blue-white pulse bolts | Chunkier magenta plasma bolts |
+| Shield response | Cyan local patch | Jade local patch |
+
+Use this as a reusable faction distinction rather than recoloring a human hull. Preserve comparable ship-class scale so a frigate duel remains readable. The name and faction lore remain open for later game design.
 
 ## 4. Scale, docking and clearance
 
@@ -103,8 +121,21 @@ Use these effect roles consistently:
 | Mining cut | Narrow amber-white line with a restrained orange halo | Active extraction tool |
 | Impact heat | Small orange rim and short warm spark streaks | Local material heating |
 | Ore retrieval | Thin cyan tether | Collecting a loose fragment |
+| Human pulse weapon | Separated blue-white short streaks | Human defensive fire |
+| Veyr plasma weapon | Magenta short bolts | Alien offensive fire |
+| Shield hit | Local translucent cyan or jade patch with energy ripples | Shield absorbing incoming fire |
 
 Keep the impact readable and localized. Place solid mineral outcrops on the rock surface. Separate ordinary ore fragments from incandescent sparks. Do not add a station or HUD to an open-space mining vignette unless that becomes the scene's intended activity.
+
+### Frigate combat
+
+Face the ships toward one another with a clear firing corridor and some vertical separation in the composition. Show both hull silhouettes and their identifying materials. Small banking angles and tapered drive plumes can imply maneuvering while retaining the shared tactical camera.
+
+Distinguish weapons from mining tools through shape and timing: combat uses separated short pulse or plasma streaks, while industrial extraction uses continuous warm cutting beams. Spawn fire from real weapon sockets. Local shield patches, bright contact points and short energy arcs communicate a hit without hiding the ship inside an opaque bubble.
+
+Incoming projectiles terminate at a defined shield surface. Keep shield effects separate from the hull and use consistent faction colors for their response. Energy arcs should read as dissipating shield energy; reserve physical armor debris and hull damage for a scene that actually depicts a breached shield. Background rocks should frame the fight and leave the weapons and impact regions legible.
+
+The combat scene reuses the original starter hull, retracts its gear and aims its existing turret. Alien geometry and faction materials are separate reusable assets. Neither scene setup nor visual effects constitute a gameplay combat system; AI, movement, targeting, damage and shield rules belong in the engine implementation.
 
 ## 8. Asset and scene structure
 
@@ -120,7 +151,7 @@ Store each vignette under `Scenes/<SceneName>/` with:
 - A manifest recording axes, units, geometry statistics and meaningful validation results.
 - A README explaining rebuilding, importing and the intended activity.
 
-Use standard metallic/roughness materials for GLB geometry. Procedural backgrounds, Blender lighting and compositor glow remain presentation elements. Recreate dynamic particles, bloom and beam behavior in the game engine. The current mining vignette is a static visual setup; extraction rules, inventory and targeting behavior are separate gameplay work.
+Use standard metallic/roughness materials for GLB geometry. Procedural backgrounds, Blender lighting and compositor glow remain presentation elements. Recreate dynamic particles, bloom and beam behavior in the game engine. The current mining and combat vignettes are static visual setups; extraction rules, inventory, targeting and combat simulation are separate gameplay work.
 
 ## 9. Game preparation and review
 
@@ -131,7 +162,7 @@ Before accepting a new scene, check:
 1. The main activity reads clearly from the overview camera.
 2. Ships retain the established silhouette, material roles and class proportions.
 3. Solid geometry clears nearby assets; a landed ship fits its actual berth and surrounding structure.
-4. Mining beams terminate on the rock surface and originate from attached tools.
+4. Mining beams terminate on the rock surface and originate from attached tools; combat fire originates at weapon sockets and meets the intended shield surface.
 5. Lighting preserves both the hull's form and the active contact points.
 6. Source assets remain available, with effects and equipment organized separately.
 7. The saved Blender file opens without missing external resources, and exports use the documented axes and scale.
