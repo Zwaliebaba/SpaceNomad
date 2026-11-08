@@ -7,12 +7,15 @@ Reference scenes:
 - [Orion Fringe](../Scenes/OrionFringe/README.md): station, preserved Aurora cruiser and starter frigate on berth 07.
 - [Asteroid Mining](../Scenes/AsteroidMining/README.md): the starter frigate extracting ore in open space.
 - [Frigate Combat](../Scenes/FrigateCombat/README.md): the same starter frigate dueling a Veyr alien frigate.
+- [Orbital Sector 7](../Scenes/OrbitalSector7/README.md): a new reference-inspired sector with a ring station, blue/red fleets and a technical edge treatment.
 
 ![Orion Fringe overview](../Scenes/OrionFringe/orion_fringe_preview.png)
 
 ![Asteroid Mining overview](../Scenes/AsteroidMining/asteroid_mining_preview.png)
 
 ![Frigate Combat overview](../Scenes/FrigateCombat/frigate_combat_preview.png)
+
+![Orbital Sector 7 overview](../Scenes/OrbitalSector7/orbital_sector_7_preview.png)
 
 ## 1. Art direction
 
@@ -138,6 +141,16 @@ Incoming projectiles terminate at a defined shield surface. Keep shield effects 
 The combat scene reuses the original starter hull, retracts its gear and aims its existing turret. Alien geometry and faction materials are separate reusable assets. Neither scene setup nor visual effects constitute a gameplay combat system; AI, movement, targeting, damage and shield rules belong in the engine implementation.
 
 ## 8. Asset and scene structure
+
+### Orbital Sector 7 technical treatment
+
+This reference-inspired scene introduces an optional technical visualization treatment. Use dark solid hulls with fine blue or red edge accents, subtle teal asteroid facet edges, warm amber windows and restrained engine glow. Keep these as real 3D surface details that share the camera and depth of the objects. Preserve the broad lighting and tactical camera conventions while giving the new scene its own reference-matched station and patrol hulls.
+
+Use a large open ring station, vertical communications tower and underslung spine as the primary landmark. Place five blue vessels in the central formation, four smaller red vessels in the distance, and frame them with asteroid installations and one large diagonal foreground rock. A blue crescent planet establishes the background. Keep distant factions readable through both color and composition.
+
+The edge accents are presentation geometry batched per assembly, and can later be replaced by an engine shader. They do not substitute for solid surfaces. Omit all screen-space UI: menus, health bars, minimaps, selection rings, destination markers and dashed travel paths. Those belong to the later HUD implementation. The original shaded industrial scenes and their saved ship assets remain intact; this is an additional visual treatment, not a replacement of their design rules.
+
+### Shared assembly conventions
 
 Use named collections for ships, equipment, rocks, effects, backdrop, lighting and cameras. Keep each reusable assembly under an explicit `*_ROOT` pivot. Ship roots use +Y as forward. Give tool emitters and asteroid hit targets named empty objects when they will be useful to game code.
 

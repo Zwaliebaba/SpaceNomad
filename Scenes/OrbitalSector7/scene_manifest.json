@@ -1,0 +1,53 @@
+{
+  "seed": 2346,
+  "units": "metres (working scene scale)",
+  "blender_up": "+Z",
+  "gltf_up": "+Y",
+  "ship_forward": "+Y",
+  "camera": "orthographic / 48 units wide",
+  "assets": {
+    "blue_ring_station": {
+      "triangles": 7780
+    },
+    "red_command_station": {
+      "triangles": 2936
+    },
+    "blue_fleet": {
+      "triangles": 6600
+    },
+    "red_fleet": {
+      "triangles": 5280
+    },
+    "asteroid_outposts": {
+      "triangles": 8448
+    },
+    "asteroid_field": {
+      "triangles": 15600
+    },
+    "engine_effects": {
+      "triangles": 1296
+    }
+  },
+  "composition": {
+    "blue_patrols": 5,
+    "red_patrols": 4,
+    "asteroid_outposts": 3,
+    "main_stations": 2,
+    "foreground_asteroid": "ForegroundAsteroid_ROOT",
+    "blue_planet": "BluePlanet_ROOT"
+  },
+  "hud_included": false,
+  "excluded_overlays": [
+    "menus",
+    "fleet list",
+    "health bars",
+    "resources",
+    "minimap",
+    "selection cards",
+    "selection rings",
+    "waypoint marker",
+    "dashed course line"
+  ],
+  "edge_treatment": "physical edge tubes batched per assembly and color; included with corresponding GLBs",
+  "notes": "Independent reference-inspired scene, not a modification of earlier scenes. Planet, starfield, camera and lights are Blender presentation assets. Fleet movement and tactical HUD are not implemented."
+}
