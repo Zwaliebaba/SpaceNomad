@@ -1,6 +1,6 @@
 """SpaceNomad game scene. Blender 4.3+: blender -b --python create_scene.py
 
-All dimensions are metres. +Z is up, frigate forward is +Y.
+All dimensions are metres. +Z is up, ship forward is +Y.
 Optional environment: SCENE_OUTPUT, RENDER_SAMPLES, RENDER_SCALE, SKIP_RENDER.
 """
 import bpy, math, random, os, json, struct
@@ -14,7 +14,7 @@ for data in list(bpy.data.collections):
     if data.name != 'Collection': bpy.data.collections.remove(data)
 scene = bpy.context.scene
 groups = {}
-for name in ['Station', 'Frigate', 'Asteroids', 'Backdrop', 'Lighting', 'Cameras']:
+for name in ['Station', 'Cruiser', 'Frigate', 'Asteroids', 'Backdrop', 'Lighting', 'Cameras']:
     c = bpy.data.collections.new(name); scene.collection.children.link(c); groups[name] = c
 active = 'Station'
 def move(o, name):
@@ -139,7 +139,7 @@ for side in [-1,1]:
         beam('Pod | antenna',sp(x,.5,3.2),sp(x,.5,5.0),.045,lightarmor)
         cyl('Pod | amber beacon',sp(x,.5,5.05),.05,.1,warm)
 # Forward rectangular landing apron with painted broken perimeter and guidance.
-box('Dock | neck',sp(0,-2.6,.75),(1.65,2,1.05),dark,.1)
+box('Dock | neck',sp(0,-2.6,.40),(1.65,2,.86),dark,.1)
 box('Dock | slab',sp(0,-4.3,.55),(4.9,4,.42),armor,.14)
 box('Dock | inset deck',sp(0,-4.3,.79),(4.55,3.65,.08),steel,.1)
 for x in [-2.04,2.04]:
@@ -163,9 +163,9 @@ o=bpy.data.objects.new('Banner | hanging pennant',me);groups['Station'].objects.
 sol=o.modifiers.new('Fabric thickness','SOLIDIFY');sol.thickness=.015
 beam('Banner | support bar',sp(4.35,-1.46,2.5),sp(6.05,-1.46,2.5),.04,lightarmor)
 text('Banner | insignia','N',sp(5.2,-1.49,1.3),.8,lightarmor,(pi/2,0,0))
-# Frigate: a compact, modular, longitudinal vessel. Separate mesh parts support gameplay.
-active='Frigate'; F=layout(-8,-2,2)
-def fp(x,y,z):return F+Vector((x,y,z))
+# Preserve the original Aurora ship at full size, now classified as a cruiser.
+active='Cruiser'; C=layout(-7,4,-8)
+def fp(x,y,z):return C+Vector((x,y,z))
 def hullmesh(name,sections,m):
     vs=[]
     for y,w,z,h in sections:
@@ -177,45 +177,76 @@ def hullmesh(name,sections,m):
     me=bpy.data.meshes.new(name);me.from_pydata(vs,[],[tuple(reversed(f)) for f in faces]);me.update()
     o=bpy.data.objects.new(name,me);groups[active].objects.link(o);assign(o,m)
     b=o.modifiers.new('Armor edge bevel','BEVEL');b.width=.08;b.segments=1;o.modifiers.new('Hull normals','WEIGHTED_NORMAL');return o
-hullmesh('Frigate | keel',[(-4.5,1.28,0,.55),(-2.8,1.45,0,.65),(1.8,1.2,.04,.6),(4.8,.72,.13,.34),(5.4,.44,.16,.22)],steel)
+hullmesh('Cruiser | keel',[(-4.5,1.28,0,.55),(-2.8,1.45,0,.65),(1.8,1.2,.04,.6),(4.8,.72,.13,.34),(5.4,.44,.16,.22)],steel)
 for side in [-1,1]:
     for i,(y,w) in enumerate([(-3.5,1.3),(-1.85,1.35),(-.15,1.3),(1.55,1.15),(3.1,.9)]):
-        box('Frigate | flank armor',fp(side*w,y,.03),(.32,1.48,1),lightarmor if i%2 else armor,.08)
-        box('Frigate | top armor',fp(side*.67,y,.62),(.98,1.42,.22),armor,.07)
-        box('Frigate | top fastener',fp(side*.98,y-.5,.755),(.1,.12,.04),dark,.01)
-        box('Frigate | flank dark insert',fp(side*(w+.18),y,.1),(.035,.95,.33),dark,.01)
-    box('Frigate | orange hull band',fp(side*1.25,.8,.14),(.36,.48,1.1),orange,.04)
-    box('Frigate | armored shoulder',fp(side*1.63,-2.9,-.05),(.78,2.25,1.15),armor,.12)
-    box('Frigate | rear engine housing',fp(side*.92,-4.4,-.08),(1.18,1.42,1.2),dark,.15)
-    box('Frigate | engine armor cap',fp(side*.92,-4.25,.56),(1.3,1.42,.25),armor,.1)
-    box('Frigate | engine surround',fp(side*.92,-5.1,-.05),(.94,.14,.78),steel,.09)
-    box('Frigate | engine luminous core',fp(side*.92,-5.19,-.05),(.62,.025,.43),core,.04)
-    box('Frigate | engine marker',fp(side*.92,-5.21,.42),(.3,.025,.1),warm,.01)
-    box('Frigate | forward green nav',fp(side*.9,3.4,.3),(.07,.4,.08),cyan,.01)
+        box('Cruiser | flank armor',fp(side*w,y,.03),(.32,1.48,1),lightarmor if i%2 else armor,.08)
+        box('Cruiser | top armor',fp(side*.67,y,.62),(.98,1.42,.22),armor,.07)
+        box('Cruiser | top fastener',fp(side*.98,y-.5,.755),(.1,.12,.04),dark,.01)
+        box('Cruiser | flank dark insert',fp(side*(w+.18),y,.1),(.035,.95,.33),dark,.01)
+    box('Cruiser | orange hull band',fp(side*1.25,.8,.14),(.36,.48,1.1),orange,.04)
+    box('Cruiser | armored shoulder',fp(side*1.63,-2.9,-.05),(.78,2.25,1.15),armor,.12)
+    box('Cruiser | rear engine housing',fp(side*.92,-4.4,-.08),(1.18,1.42,1.2),dark,.15)
+    box('Cruiser | engine armor cap',fp(side*.92,-4.25,.56),(1.3,1.42,.25),armor,.1)
+    box('Cruiser | engine surround',fp(side*.92,-5.1,-.05),(.94,.14,.78),steel,.09)
+    box('Cruiser | engine luminous core',fp(side*.92,-5.19,-.05),(.62,.025,.43),core,.04)
+    box('Cruiser | engine marker',fp(side*.92,-5.21,.42),(.3,.025,.1),warm,.01)
+    box('Cruiser | forward green nav',fp(side*.9,3.4,.3),(.07,.4,.08),cyan,.01)
     # Visible exhaust: nested tapered transparent emissive volumes, GLB-friendly mesh glow.
     plume=mat('Drive | transparent blue plume '+str(side),(.015,.1,1),0,.6,1.2)
     p=plume.node_tree.nodes.get('Principled BSDF');p.inputs['Alpha'].default_value=.12
     plume.surface_render_method='DITHERED'
-    o=beam('Frigate | ion exhaust',fp(side*.92,-5.25,-.05),fp(side*.92,-8.6,-.05),.32,plume,24)
+    o=beam('Cruiser | ion exhaust',fp(side*.92,-5.25,-.05),fp(side*.92,-8.6,-.05),.32,plume,24)
     # Taper the aft end, keeping the nozzle bright and the tail fine.
     for v in o.data.vertices:
         if v.co.z>0:v.co.x*=.06;v.co.y*=.06
-    point('Engine | blue spill',fp(side*.92,-5.55,-.05),(.015,.24,1),65,.4)
-box('Frigate | dorsal spine',fp(0,-.6,.87),(.63,5.7,.38),dark,.1)
-box('Frigate | bridge superstructure',fp(0,1.7,.95),(1.12,1.55,.52),armor,.12)
-box('Frigate | recessed bridge glazing',fp(0,2.49,1.0),(.84,.035,.21),dark,.03)
-for x in [-.28,0,.28]:box('Frigate | bridge window',fp(x,2.515,1.03),(.2,.025,.09),cyan,.01)
+    light=point('Cruiser | engine blue spill',fp(side*.92,-5.55,-.05),(.015,.24,1),65,.4)
+    groups['Lighting'].objects.unlink(light);groups['Cruiser'].objects.link(light)
+box('Cruiser | dorsal spine',fp(0,-.6,.87),(.63,5.7,.38),dark,.1)
+box('Cruiser | bridge superstructure',fp(0,1.7,.95),(1.12,1.55,.52),armor,.12)
+box('Cruiser | recessed bridge glazing',fp(0,2.49,1.0),(.84,.035,.21),dark,.03)
+for x in [-.28,0,.28]:box('Cruiser | bridge window',fp(x,2.515,1.03),(.2,.025,.09),cyan,.01)
 for y in [-2.5,-1.5,-.5]:
-    box('Frigate | radiator bed',fp(0,y,1.1),(.52,.65,.09),dark,.02)
-    for j in range(5):box('Frigate | radiator fin',fp(0,y+(j-2)*.11,1.17),(.55,.04,.09),armor,.01)
+    box('Cruiser | radiator bed',fp(0,y,1.1),(.52,.65,.09),dark,.02)
+    for j in range(5):box('Cruiser | radiator fin',fp(0,y+(j-2)*.11,1.17),(.55,.04,.09),armor,.01)
 for x in [-.65,.65]:
-    cyl('Frigate | point defense base',fp(x,-1.8,.88),.24,.23,dark,10)
-    beam('Frigate | point defense barrel',fp(x,-1.7,1.04),fp(x,-.8,1.04),.055,dark)
-text('Frigate | hull registry','AURORA',fp(.15,3.45,.66),.2,dark)
-beam('Frigate | comms aerial',fp(-.4,-.5,1.05),fp(-.4,-.5,1.8),.018,lightarmor,6)
+    cyl('Cruiser | point defense base',fp(x,-1.8,.88),.24,.23,dark,10)
+    beam('Cruiser | point defense barrel',fp(x,-1.7,1.04),fp(x,-.8,1.04),.055,dark)
+text('Cruiser | hull registry','AURORA',fp(.15,3.45,.66),.2,dark)
+beam('Cruiser | comms aerial',fp(-.4,-.5,1.05),fp(-.4,-.5,1.8),.018,lightarmor,6)
+# Starter frigate: a separate, simpler hull in the same design family, landed on berth 07.
+active='Frigate'; F=sp(0,-4.3,1.30)
+def fp(x,y,z):return F+Vector((x,y,z))
+idle=mat('Drive | idle cyan',(.025,.28,.5),.1,.45,.65)
+hullmesh('Frigate | keel',[(-1.12,.43,0,.18),(-.55,.52,0,.21),(.6,.40,.025,.18),(1.30,.17,.02,.12)],steel)
+# Narrow twin drive pods, split armor, and a single orange band echo the cruiser.
+for side in [-1,1]:
+    box('Frigate | engine housing',fp(side*.35,-1.10,-.015),(.40,.50,.39),dark,.045)
+    box('Frigate | engine armor cap',fp(side*.35,-1.05,.20),(.44,.49,.10),armor,.03)
+    box('Frigate | idle engine aperture',fp(side*.35,-1.356,-.015),(.23,.018,.20),idle,.015)
+    for y in [-.60,.12]:
+        box('Frigate | shoulder armor',fp(side*.53,y,.015),(.20,.63,.37),lightarmor,.035)
+        box('Frigate | dorsal armor',fp(side*.29,y,.245),(.39,.61,.10),armor,.025)
+        box('Frigate | flank recess',fp(side*.638,y,.01),(.015,.36,.13),dark,.005)
+    box('Frigate | orange identification band',fp(side*.53,-.18,.04),(.23,.15,.41),orange,.02)
+    box('Frigate | nav marker',fp(side*.41,.68,.15),(.055,.12,.045),cyan,.005)
+    for y in [-.74,.25]:box('Frigate | armor fastener',fp(side*.40,y,.30),(.04,.055,.02),dark,.003)
+box('Frigate | compact spine',fp(0,-.22,.29),(.19,1.47,.17),dark,.025)
+box('Frigate | bridge',fp(0,.45,.34),(.51,.59,.25),armor,.045)
+box('Frigate | bridge glazing',fp(0,.751,.37),(.37,.018,.10),idle,.008)
+box('Frigate | bridge mullion',fp(0,.765,.37),(.025,.015,.12),dark,0)
+for j in range(4):box('Frigate | cooling fin',fp(0,-.71+j*.115,.41),(.28,.036,.07),armor,.006)
+cyl('Frigate | single defense mount',fp(0,-.15,.44),.12,.10,dark,8)
+beam('Frigate | short defense barrel',fp(0,-.1,.50),fp(0,.20,.50),.025,dark,6)
+beam('Frigate | short aerial',fp(-.19,.4,.47),fp(-.19,.4,.70),.009,lightarmor,5)
+# Deployed tripod: lowest foot surface is exactly z=0.86 above the station origin.
+for x,y in [(-.46,-.72),(.46,-.72),(0,.83)]:
+    beam('Frigate | landing strut',fp(x*.82,y,-.14),fp(x,y,-.38),.035,lightarmor,6)
+    box('Frigate | landing foot',fp(x,y,-.41),(.19,.25,.06),dark,.015)
+text('Frigate | hull number','01',fp(.20,.84,.205),.11,dark)
 # Low-poly asteroids with seeded, varied faceting.
 active='Asteroids'
-asteroids=[(-17,-.9,-2,2.0),(-2,7,-7,1.55),(17,2,-4,1.7),(16,-9,3,4.6),(-.5,-7,-1,.9),(12,-6,0,.8),(-7,4,-5,.65),(-5,10,-9,.48),(8,-9,-2,.55),(-14,-4,-4,.4),(15,-2,-5,.35),(-11,-9,-2,.45)]
+asteroids=[(-17,-.9,-2,2.0),(-2,7,-7,1.55),(17,2,-4,1.7),(16,-9,3,4.6),(-.5,-7,-1,.9),(12,-6,0,.8),(-10,6,-5,.65),(-5,10,-9,.48),(8,-9,-2,.55),(-14,-4,-4,.4),(15,-2,-5,.35),(-11,-9,-2,.45)]
 for idx,(x,y,d,r) in enumerate(asteroids):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2 if r>1 else 1,radius=r,location=layout(x,y,d))
     o=move(bpy.context.object,'Asteroid | %02d'%idx)
@@ -266,6 +297,7 @@ for f in o.data.polygons:f.use_smooth=True
 # Camera and film lighting.
 active='Cameras'
 bpy.ops.object.camera_add(location=layout(0,0,60));cam=move(bpy.context.object,'Camera | tactical overview');cam.rotation_euler=(-view).to_track_quat('-Z','Y').to_euler();cam.data.type='ORTHO';cam.data.ortho_scale=40;scene.camera=cam
+bpy.ops.object.camera_add(location=F+view*12);detail=move(bpy.context.object,'Camera | starter frigate detail');detail.rotation_euler=(-view).to_track_quat('-Z','Y').to_euler();detail.data.type='ORTHO';detail.data.ortho_scale=4.2
 active='Lighting'
 world=bpy.data.worlds.new('Deep space');scene.world=world;world.use_nodes=True;world.node_tree.nodes['Background'].inputs[0].default_value=(.035,.06,.11,1);world.node_tree.nodes['Background'].inputs[1].default_value=.25
 d=bpy.data.lights.new('Sun | cool starlight','SUN');d.energy=2.4;d.angle=.1;d.color=(.67,.77,1)
@@ -277,15 +309,44 @@ area('Key | soft warm rim',sp(-7,-1,16),1800,(1,.62,.37),10,S)
 area('Fill | cool camera bounce',layout(-4,2,19),1800,(.3,.48,1),14,S)
 point('Station | approach light',sp(0,-2.5,2.0),(1,.32,.06),60,1)
 # Game-oriented collection roots and metadata. Recenter each assembly at its pivot.
-for group,pivot in [('Station',S),('Frigate',F)]:
+for group,pivot in [('Station',S),('Cruiser',C),('Frigate',F)]:
     root=bpy.data.objects.new(group+'_ROOT',None);groups[group].objects.link(root);root.location=pivot
     bpy.context.view_layer.update()
     root['asset_type']=group.lower();root['units']='metres';root['forward_axis']='+Y';root['up_axis']='+Z'
     for o in list(groups[group].objects):
         if o!=root:
             w=o.matrix_world.copy();o.parent=root;o.matrix_world=w
-bpy.data.objects['Frigate_ROOT'].rotation_euler.z=math.radians(-35)
+bpy.data.objects['Cruiser_ROOT'].rotation_euler.z=math.radians(-35)
 bpy.context.view_layer.update()
+# Validate the complete evaluated frigate, including bevels, gear and aerials.
+bpy.context.view_layer.update()
+depsgraph=bpy.context.evaluated_depsgraph_get()
+station_inverse=bpy.data.objects['Station_ROOT'].matrix_world.inverted()
+points=[]
+for obj in groups['Frigate'].objects:
+    if obj.type not in {'MESH','FONT'}:continue
+    evaluated=obj.evaluated_get(depsgraph);mesh=evaluated.to_mesh()
+    points.extend(station_inverse @ (obj.matrix_world @ v.co) for v in mesh.vertices)
+    evaluated.to_mesh_clear()
+lo=[min(p[i] for p in points) for i in range(3)];hi=[max(p[i] for p in points) for i in range(3)]
+clearance=min(lo[0]+2.04,2.04-hi[0],lo[1]+5.83,-2.77-hi[1])
+assert clearance>=.15, ('Frigate overlaps pad safety boundary',lo,hi,clearance)
+assert abs(lo[2]-.86)<.002, ('Landing feet are not on the deck',lo[2])
+# Reject intersections with every structural station mesh; paint is a visual overlay.
+structural_checks=0
+for obj in groups['Station'].objects:
+    if obj.type!='MESH':continue
+    if any(label in obj.name for label in ['stripe','dash','berth H','berth number']):continue
+    evaluated=obj.evaluated_get(depsgraph);mesh=evaluated.to_mesh()
+    obstacle=[station_inverse @ (obj.matrix_world @ v.co) for v in mesh.vertices]
+    evaluated.to_mesh_clear()
+    lower=[min(p[i] for p in obstacle) for i in range(3)];upper=[max(p[i] for p in obstacle) for i in range(3)]
+    assert any(hi[i]<=lower[i]+.0001 or lo[i]>=upper[i]-.0001 for i in range(3)), ('Frigate intersects station structure',obj.name,lower,upper)
+    structural_checks+=1
+
+docking={'berth':'07','landed':True,'ship_bounds_station_space':{'min':lo,'max':hi},'safety_boundary_xy':[-2.04,2.04,-5.83,-2.77],'minimum_edge_clearance':clearance,'landing_foot_height':lo[2],'structural_obstacles_checked':structural_checks,'connector_top_height':.83}
+scene['starter_frigate_pad_clearance']=clearance
+print('DOCK_FIT_OK',json.dumps(docking),flush=True)
 scene['description']='Orion Fringe / Frontier Depot — HUD-free game environment blockout'
 scene['seed']=2266
 scene.render.engine='CYCLES';scene.cycles.samples=int(os.environ.get('RENDER_SAMPLES','128'));scene.cycles.use_denoising=bool(getattr(bpy.app.build_options, 'openimagedenoise', False))
@@ -304,18 +365,24 @@ for screen in bpy.data.screens:
 scene.render.filepath=os.path.join(OUT,'orion_fringe_preview.png')
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT,'orion_fringe.blend'), compress=True)
 # GLB excludes backdrop, cameras, lights, and effect geometry for engine portability.
-for name in ['Station','Frigate','Asteroids']:
+for name in ['Station','Cruiser','Frigate','Asteroids']:
     bpy.ops.object.select_all(action='DESELECT')
     for o in groups[name].objects:
         if 'ion exhaust' not in o.name:o.select_set(True)
     bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name.lower()+'.glb'),export_format='GLB',use_selection=True,export_apply=True,export_yup=True)
 bpy.ops.object.select_all(action='DESELECT')
-manifest={'units':'metres','blender_up':'+Z','blender_forward':'+Y','gltf_up':'+Y','seed':2266,'assets':{name:{'objects':len(groups[name].objects),'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in groups[name].objects if o.type=='MESH')} for name in ['Station','Frigate','Asteroids']},'notes':'GLBs retain scene placement; use *_ROOT transforms for station and frigate. Backdrop and drive plume are Blender presentation effects.'}
+manifest={'units':'metres','blender_up':'+Z','blender_forward':'+Y','gltf_up':'+Y','seed':2266,'assets':{name:{'objects':len(groups[name].objects),'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in groups[name].objects if o.type=='MESH')} for name in ['Station','Cruiser','Frigate','Asteroids']},'notes':'GLBs retain scene placement. Aurora cruiser is preserved at original scale in the background; starter frigate is landed on berth 07. Backdrop and cruiser drive plumes are presentation effects.'}
+manifest['docking_validation']=docking
 for name, stats in manifest['assets'].items():
     stats['triangles_base_mesh'] = stats.pop('triangles')
     with open(os.path.join(OUT, name.lower()+'.glb'), 'rb') as f:
         f.seek(12); length, chunk_type = struct.unpack('<II', f.read(8)); gltf = json.loads(f.read(length))
     stats['triangles_export'] = sum(gltf['accessors'][p['indices']]['count']//3 for m in gltf['meshes'] for p in m['primitives'])
 with open(os.path.join(OUT,'scene_manifest.json'),'w') as f:json.dump(manifest,f,indent=2)
-if not os.environ.get('SKIP_RENDER'):bpy.ops.render.render(write_still=True)
+if not os.environ.get('SKIP_RENDER'):
+    bpy.ops.render.render(write_still=True)
+    scene.camera=detail;scene.render.resolution_x=1000;scene.render.resolution_y=1000
+    scene.render.filepath=os.path.join(OUT,'starter_frigate_detail.png');scene.cycles.samples=min(scene.cycles.samples,32)
+    bpy.ops.render.render(write_still=True)
+
 print('SCENE_COMPLETE',OUT,flush=True)
