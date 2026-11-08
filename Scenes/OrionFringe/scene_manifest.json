@@ -1,0 +1,25 @@
+{
+  "units": "metres",
+  "blender_up": "+Z",
+  "blender_forward": "+Y",
+  "gltf_up": "+Y",
+  "seed": 2266,
+  "assets": {
+    "Station": {
+      "objects": 348,
+      "triangles_base_mesh": 7443,
+      "triangles_export": 14936
+    },
+    "Frigate": {
+      "objects": 90,
+      "triangles_base_mesh": 1328,
+      "triangles_export": 5292
+    },
+    "Asteroids": {
+      "objects": 12,
+      "triangles_base_mesh": 480,
+      "triangles_export": 480
+    }
+  },
+  "notes": "GLBs retain scene placement; use *_ROOT transforms for station and frigate. Backdrop and drive plume are Blender presentation effects."
+}
